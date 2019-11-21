@@ -355,7 +355,7 @@ GameManager.prototype.fusionRules = {
 						 }
 };
 
-/*
+
 GameManager.prototype.labels = {
 	"Proton": "Proton",
 	"Electron": "Electron",
@@ -379,7 +379,6 @@ GameManager.prototype.labels = {
 	"56Nickel": "<sup>56</sup>Ni",
 	"56Iron": "<sup>56</sup>Fe"
 };
-*/
 
 GameManager.prototype.pointValues = {
 	"Hydrogen-2":1,
