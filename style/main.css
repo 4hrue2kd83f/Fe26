@@ -105,6 +105,10 @@ h1.title {
 .score-container:after {
   content: "Score"; }
 
+.score-container {
+	margin-top: "16px";
+}
+
 .best-container:after {
   content: "Best"; }
 
@@ -164,8 +168,8 @@ hr {
   touch-action: none;
   background: #00ada0;
   border-radius: 6px;
-  width: 611px;
-  height: 611px;
+  width: 626px;
+  height: 626px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -375,11 +379,11 @@ hr {
     text-align: center;
     top: 7px;
     width: 16px; }
-  .tile.tile-Hydrogen .tile-inner {
+  .tile.tile-Hydrogen-1 .tile-inner {
     background: #eee4da; }
-  .tile.tile-Deuteron .tile-inner {
+  .tile.tile-Hydrogen-2 .tile-inner {
     background: #ede2d0; }
-  .tile.tile-3Helium .tile-inner {
+  .tile.tile-Helium-3 .tile-inner {
     color: #f9f6f2;
     background: #f2b280; }
   .tile.tile-4Helium .tile-inner {
