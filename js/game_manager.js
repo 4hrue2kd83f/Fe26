@@ -328,8 +328,6 @@ GameManager.prototype.fusion = function (first, second) {
 // a:{b:c}
 // a + b = c
 GameManager.prototype.fusionRules = {
-	"Proton":{"Electron":"Hydrogen-1"
-		 },
 	"Hydrogen-1":{"Hydrogen-1":"Hydrogen-2",
 							"Hydrogen-2":"Helium-3"
 						 },
@@ -391,6 +389,7 @@ GameManager.prototype.pointValues = {
 	"16Oxygen":8,
 	"20Neon":10,
 	"24Magnesium":12,
+	"Aluminum-27":13,
 	"28Silicon":14,
 	"32Sulfur":16,
 	"36Argon":18,
