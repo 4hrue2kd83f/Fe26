@@ -335,6 +335,7 @@ GameManager.prototype.fusionRules = {
 						 },
 	"Helium-3":{"Helium-3":"Helium-4",
 							"Helium-4":"7Beryllium"
+							"24Magnesium":"Aluminum-27"
 						},
 	"Helium-4":{"Helium-4":"8Beryllium", // unstable decays into 2 Helium-4s
 						 "8Beryllium":"12Carbon",
@@ -357,18 +358,18 @@ GameManager.prototype.fusionRules = {
 
 
 GameManager.prototype.labels = {
-	"Proton": "Proton",
-	"Electron": "Electron",
 	"Hydrogen-1": "<sup>1</sup>H",
 	"Hydrogen-2": "<sup>2</sup>H",
 	"Helium-3": "<sup>3</sup>He",
 	"Helium-4": "<sup>4</sup>He",
+	"Lithium-7": "<sup>7</sup>Li"
 	"7Beryllium": "<sup>7</sup>Be",
 	"8Beryllium": "<sup>8</sup>Be",
 	"12Carbon": "<sup>12</sup>C",
 	"16Oxygen": "<sup>16</sup>O",
 	"20Neon": "<sup>20</sup>Ne",
 	"24Magnesium": "<sup>24</sup>Mg",
+	"Aluminum-27": "<sup>27</sup>Al"
 	"28Silicon": "<sup>28</sup>Si",
 	"32Sulfur": "<sup>32</sup>S",
 	"36Argon": "<sup>36</sup>Ar",
