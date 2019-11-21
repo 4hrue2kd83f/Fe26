@@ -75,12 +75,12 @@ GameManager.prototype.addStartTiles = function () {
 	}
 };
 
+
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
 	if (this.grid.cellsAvailable()) {
 		var value = Math.random() < 0.75 ? "Hydrogen-1" : Math.random() < 0.96 ? "Helium-4" : "Lithium-7";
 		var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
-
 		this.grid.insertTile(tile);
 	}
 };
@@ -360,14 +360,14 @@ GameManager.prototype.labels = {
 	"Hydrogen-2": "<sup>2</sup>H",
 	"Helium-3": "<sup>3</sup>He",
 	"Helium-4": "<sup>4</sup>He",
-	"Lithium-7": "<sup>7</sup>Li"
+	"Lithium-7": "<sup>7</sup>Li",
 	"7Beryllium": "<sup>7</sup>Be",
 	"8Beryllium": "<sup>8</sup>Be",
 	"12Carbon": "<sup>12</sup>C",
 	"16Oxygen": "<sup>16</sup>O",
 	"20Neon": "<sup>20</sup>Ne",
 	"24Magnesium": "<sup>24</sup>Mg",
-	"Aluminum-27": "<sup>27</sup>Al"
+	"Aluminum-27": "<sup>27</sup>Al",
 	"28Silicon": "<sup>28</sup>Si",
 	"32Sulfur": "<sup>32</sup>S",
 	"36Argon": "<sup>36</sup>Ar",
