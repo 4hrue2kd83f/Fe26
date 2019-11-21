@@ -333,10 +333,10 @@ GameManager.prototype.fusionRules = {
 	"Hydrogen-1":{"Hydrogen-1":"Hydrogen-2",
 							"Hydrogen-2":"Helium-3"
 						 },
-	"Helium-3":{"Helium-3":"4Helium",
-							"4Helium":"7Beryllium"
+	"Helium-3":{"Helium-3":"Helium-4",
+							"Helium-4":"7Beryllium"
 						},
-	"4Helium":{"4Helium":"8Beryllium", // unstable decays into 2 4heliums
+	"Helium-4":{"Helium-4":"8Beryllium", // unstable decays into 2 Helium-4s
 						 "8Beryllium":"12Carbon",
 						 "12Carbon":"16Oxygen",
 						 "16Oxygen":"20Neon",
@@ -349,9 +349,9 @@ GameManager.prototype.fusionRules = {
 						 "48Chromium":"52Iron",
 						 "52Iron":"56Nickel"
 						},
-	"16Oxygen":{"16Oxygen":"28Silicon", // + 4Helium
+	"16Oxygen":{"16Oxygen":"28Silicon", // + Helium-4
 						 },
-	"12Carbon":{"12Carbon":"20Neon", // + 4Helium (randomness)
+	"12Carbon":{"12Carbon":"20Neon", // + Helium-4 (randomness)
 						 }
 };
 
@@ -362,7 +362,7 @@ GameManager.prototype.labels = {
 	"Hydrogen-1": "<sup>1</sup>H",
 	"Hydrogen-2": "<sup>2</sup>H",
 	"Helium-3": "<sup>3</sup>He",
-	"4Helium": "<sup>4</sup>He",
+	"Helium-4": "<sup>4</sup>He",
 	"7Beryllium": "<sup>7</sup>Be",
 	"8Beryllium": "<sup>8</sup>Be",
 	"12Carbon": "<sup>12</sup>C",
@@ -383,7 +383,7 @@ GameManager.prototype.labels = {
 GameManager.prototype.pointValues = {
 	"Hydrogen-2":1,
 	"Helium-3":1.5,
-	"4Helium":2,
+	"Helium-4":2,
 	"7Beryllium":3,
 	"8Beryllium":4,
 	"12Carbon":6,
@@ -404,12 +404,12 @@ GameManager.prototype.pointValues = {
 GameManager.prototype.decay = {
 	"7Beryllium": {
 		"multipler": "3",
-		"to": "4Helium",
+		"to": "Helium-4",
 		"points": -3
 	},
 	"8Beryllium": {
 		"multipler": "1",
-		"to": "4Helium",
+		"to": "Helium-4",
 		"points": -4
 	},
 	"20Neon": {
