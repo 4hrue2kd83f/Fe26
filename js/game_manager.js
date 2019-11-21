@@ -334,7 +334,7 @@ GameManager.prototype.fusionRules = {
 							"Hydrogen-2":"Helium-3"
 						 },
 	"Helium-3":{"Helium-3":"Helium-4",
-							"Helium-4":"7Beryllium"
+							"Helium-4":"7Beryllium",
 							"24Magnesium":"Aluminum-27"
 						},
 	"Helium-4":{"Helium-4":"8Beryllium", // unstable decays into 2 Helium-4s
