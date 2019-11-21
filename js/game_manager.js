@@ -78,7 +78,7 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
   if (this.grid.cellsAvailable()) {
-    var value = Math.random() < 0.9 ? "Hydrogen" : "Deuteron";
+    var value = Math.random() < 0.5 ? "Proton" : "Neutron";
     var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
 
     this.grid.insertTile(tile);
@@ -328,6 +328,8 @@ GameManager.prototype.fusion = function (first, second) {
 // a:{b:c}
 // a + b = c
 GameManager.prototype.fusionRules = {
+  "Proton":{"Neutron":"Hydrogen"
+	   },
   "Hydrogen":{"Hydrogen":"Deuteron",
 							"Deuteron":"3Helium"
 						 },
@@ -354,6 +356,8 @@ GameManager.prototype.fusionRules = {
 };
 
 GameManager.prototype.labels = {
+	"Proton": "Proton",
+	"Neutron": "Neutron",
   "Hydrogen": "Hydrogen",
   "Deuteron": "Deuteron",
   "3Helium": "<sup>3</sup>Helium",
