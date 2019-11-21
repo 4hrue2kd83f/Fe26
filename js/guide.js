@@ -6,9 +6,9 @@ fillFusionTable = function() {
 			inHtml += "<tr>"
 			inHtml += "  <td>" + gm.labels[value] + "</td>"
 			inHtml += "  <td>=</td>"
-			inHtml += "  <td>" + gm.labels[key2] + "</td>"
-			inHtml += "  <td>+</td>"
 			inHtml += "  <td>" + gm.labels[key] + "</td>"
+			inHtml += "  <td>+</td>"
+			inHtml += "  <td>" + gm.labels[key2] + "</td>"
 			inHtml += "</tr>"
 			$("#fusionTable").append(inHtml);
 		}
