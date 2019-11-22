@@ -79,8 +79,8 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
 	if (this.grid.cellsAvailable()) {
-//		var value = Math.random() < 0.2 ? "Neutron" : Math.random() < 0.75 ? "Hydrogen" : Math.random() < 0.96 ? "4Helium" : Math.random() < 0.9 ? "7Lithium" : "27Aluminum";
-		var value = "27Aluminum";
+		var value = Math.random() < 0.2 ? "Neutron" : Math.random() < 0.75 ? "Hydrogen" : Math.random() < 0.96 ? "4Helium" : Math.random() < 0.9 ? "7Lithium" : "27Aluminum";
+//		var value = "27Aluminum";
 		var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
 		this.grid.insertTile(tile);
 	}
@@ -411,8 +411,8 @@ GameManager.prototype.labels = {
 	"23Sodium": "<sup>23</sup>Na",
 	"23Magnesium": "<sup>23</sup>Mg",
 	"24Magnesium": "<sup>24</sup>Mg",
-//	"27Aluminum": "<sup>27</sup>Al",
-	"27Aluminum": "Antimatter",
+	"27Aluminum": "<sup>27</sup>Al",
+//	"27Aluminum": "Antimatter",
 	"28Silicon": "<sup>28</sup>Si",
 	"32Sulfur": "<sup>32</sup>S",
 	"36Argon": "<sup>36</sup>Ar",
