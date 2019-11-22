@@ -9,7 +9,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
 	this.storageManager.clearIfOutdated(this.version);
 
 	this.startTiles		 = 2;
-	this.winningValue = "56Iron";
+	this.winningValue = "238Plutonium";
 
 	this.inputManager.on("move", this.move.bind(this));
 	this.inputManager.on("restart", this.restart.bind(this));
@@ -79,7 +79,7 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
 	if (this.grid.cellsAvailable()) {
-		var value = Math.random() < 0.2 ? "Neutron" : 0.75 ? "Hydrogen" : Math.random() < 0.96 ? "4Helium" : "7Lithium";
+		var value = Math.random() < 0.2 ? "Neutron" : Math.random() < 0.75 ? "Hydrogen" : Math.random() < 0.96 ? "4Helium" : Math.random() < 0.9 ? "7Lithium" : "27Aluminum";
 //		var value = "12Carbon";
 		var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
 		this.grid.insertTile(tile);
