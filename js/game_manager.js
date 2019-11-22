@@ -496,7 +496,7 @@ GameManager.prototype.decay = {
 	},
 	"63Nickel": {
 		"multipler": "3",
-		"to": "56Iron",
+		"to": "63Copper",
 		"points": 56
 	},
 	"64Copper": {
