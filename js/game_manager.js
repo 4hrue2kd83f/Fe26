@@ -406,7 +406,7 @@ GameManager.prototype.labels = {
 	"16Oxygen": "<sup>16</sup>O",
 	"17Oxygen": "<sup>17</sup>O",
 	"18Oxygen": "<sup>18</sup>O",
-	"19Fluorine": "<sup>20</sup>F",
+	"19Fluorine": "<sup>19</sup>F",
 	"20Neon": "<sup>20</sup>Ne",
 	"23Sodium": "<sup>23</sup>Na",
 	"23Magnesium": "<sup>23</sup>Mg",
