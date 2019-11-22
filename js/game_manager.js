@@ -79,7 +79,8 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
 	if (this.grid.cellsAvailable()) {
-		var value = Math.random() < 0.75 ? "Hydrogen-1" : Math.random() < 0.96 ? "Helium-4" : "Lithium-7";
+		var value = Math.random() < 0.2 ? "Neutron" : 0.75 ? "Hydrogen" : Math.random() < 0.96 ? "4Helium" : "7Lithium";
+//		var value = "12Carbon";
 		var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
 		this.grid.insertTile(tile);
 	}
@@ -317,6 +318,7 @@ GameManager.prototype.canFuse = function (first, second) {
 
 GameManager.prototype.fusion = function (first, second) {
 	var forward = this.fusionRules[first];
+	this.fusionRules;
 	if (forward && forward[second]) {
 		return forward[second];
 	} else {
@@ -328,18 +330,27 @@ GameManager.prototype.fusion = function (first, second) {
 // a:{b:c}
 // a + b = c
 GameManager.prototype.fusionRules = {
-	"Hydrogen-1":{"Hydrogen-1":"Hydrogen-2",
-							"Hydrogen-2":"Helium-3"
+	"Hydrogen":{"Neutron":"Deuterium",
+							"Hydrogen":"Deuterium",
+							"Deuterium":"3Helium",
+							"7Lithium":"8Beryllium",
+							"12Carbon":"13Nitrogen",
+							"13Carbon":"14Nitrogen",
+							"14Nitrogen":"15Oxygen",
+							"15Nitrogen":"16Oxygen",
+							"23Sodium":"24Magnesium",
 						 },
-	"Helium-3":{"Helium-3":"Helium-4",
-							"Helium-4":"7Beryllium",
-							"24Magnesium":"Aluminum-27"
+	"Deuterium":{"Deuterium":"Tritium"},
+	"Tritium":{"20Neon":"23Sodium"},
+	"3Helium":{"3Helium":"4Helium",
+							"4Helium":"7Beryllium",
 						},
-	"Helium-4":{"Helium-4":"8Beryllium", // unstable decays into 2 Helium-4s
+	"4Helium":{"4Helium":"8Beryllium", // unstable decays into 2 4Heliums
 						 "8Beryllium":"12Carbon",
 						 "12Carbon":"16Oxygen",
 						 "16Oxygen":"20Neon",
-						 "20Neon":"24Magnesium", // this is a killer!
+						 "20Neon":"24Magnesium",
+						 "24Magnesium":"28Silicon",
 						 "28Silicon":"32Sulfur",
 						 "32Sulfur":"36Argon",
 						 "36Argon":"40Calcium",
@@ -348,26 +359,59 @@ GameManager.prototype.fusionRules = {
 						 "48Chromium":"52Iron",
 						 "52Iron":"56Nickel"
 						},
-	"16Oxygen":{"16Oxygen":"28Silicon", // + Helium-4
+	"12Carbon":{"12Carbon":"20Neon", // + 4Helium (randomness)
 						 },
-	"12Carbon":{"12Carbon":"20Neon", // + Helium-4 (randomness)
-						 }
+	"16Oxygen":{"16Oxygen":"28Silicon", // + 4Helium
+						 },
+	"Neutron":{"Hydrogen":"Deuterium",
+		"Deuterium":"Tritium",
+				"13Carbon":"14Carbon",
+				"16Oxygen":"17Oxygen",
+				"17Oxygen":"18Oxygen",
+				"18Oxygen":"19Fluorine",
+				"19Fluorine":"20Neon",
+				"56Iron":"57Iron",
+				"57Iron":"58Iron",
+				"58Iron":"59Cobalt",
+				"59Cobalt":"60Nickel",
+				"60Nickel":"61Nickel",
+				"61Nickel":"62Nickel",
+				"62Nickel":"63Nickel",
+				"63Nickel":"64Nickel",
+				"64Nickel":"65Copper",
+				"63Copper":"64Copper",
+				"64Copper":"65Copper",
+				"65Copper":"66Zinc",
+	},
 };
 
 
 GameManager.prototype.labels = {
-	"Hydrogen-1": "<sup>1</sup>H",
-	"Hydrogen-2": "<sup>2</sup>H",
-	"Helium-3": "<sup>3</sup>He",
-	"Helium-4": "<sup>4</sup>He",
-	"Lithium-7": "<sup>7</sup>Li",
+	"Neutron": "<sup>1</sup>n",
+	"Hydrogen": "<sup>1</sup>H",
+	"Deuterium": "<sup>2</sup>H",
+	"Tritium": "<sup>3</sup>H",
+	"3Helium": "<sup>3</sup>He",
+	"4Helium": "<sup>4</sup>He",
+	"7Lithium": "<sup>7</sup>Li",
 	"7Beryllium": "<sup>7</sup>Be",
 	"8Beryllium": "<sup>8</sup>Be",
 	"12Carbon": "<sup>12</sup>C",
+	"13Carbon": "<sup>13</sup>C",
+	"14Carbon": "<sup>14</sup>C",
+	"13Nitrogen": "<sup>13</sup>N",
+	"14Nitrogen": "<sup>14</sup>N",
+	"15Nitrogen": "<sup>15</sup>N",
+	"15Oxygen": "<sup>15</sup>O",
 	"16Oxygen": "<sup>16</sup>O",
+	"17Oxygen": "<sup>17</sup>O",
+	"18Oxygen": "<sup>18</sup>O",
+	"19Fluorine": "<sup>20</sup>F",
 	"20Neon": "<sup>20</sup>Ne",
+	"23Sodium": "<sup>23</sup>Na",
+	"23Magnesium": "<sup>23</sup>Mg",
 	"24Magnesium": "<sup>24</sup>Mg",
-	"Aluminum-27": "<sup>27</sup>Al",
+	"27Aluminum": "<sup>27</sup>Al",
 	"28Silicon": "<sup>28</sup>Si",
 	"32Sulfur": "<sup>32</sup>S",
 	"36Argon": "<sup>36</sup>Ar",
@@ -375,21 +419,33 @@ GameManager.prototype.labels = {
 	"44Titanium": "<sup>44</sup>Ti",
 	"48Chromium": "<sup>48</sup>Cr",
 	"52Iron": "<sup>52</sup>Fe",
+	"56Iron": "<sup>56</sup>Fe",
+	"57Iron": "<sup>57</sup>Fe",
+	"58Iron": "<sup>58</sup>Fe",
+	"59Cobalt": "<sup>59</sup>Co",
 	"56Nickel": "<sup>56</sup>Ni",
-	"56Iron": "<sup>56</sup>Fe"
+	"60Nickel": "<sup>60</sup>Ni",
+	"61Nickel": "<sup>61</sup>Ni",
+	"62Nickel": "<sup>62</sup>Ni",
+	"63Nickel": "<sup>63</sup>Ni",
+	"64Nickel": "<sup>64</sup>Ni",
+	"63Copper": "<sup>63</sup>Cu",
+	"64Copper": "<sup>64</sup>Cu",
+	"65Copper": "<sup>65</sup>Cu",
+	"66Zinc": "<sup>66</sup>Zn",
 };
 
 GameManager.prototype.pointValues = {
-	"Hydrogen-2":1,
-	"Helium-3":1.5,
-	"Helium-4":2,
+	"Deuterium":1,
+	"3Helium":1.5,
+	"4Helium":2,
 	"7Beryllium":3,
 	"8Beryllium":4,
 	"12Carbon":6,
 	"16Oxygen":8,
 	"20Neon":10,
 	"24Magnesium":12,
-	"Aluminum-27":13,
+	"27Aluminum":13,
 	"28Silicon":14,
 	"32Sulfur":16,
 	"36Argon":18,
@@ -402,20 +458,31 @@ GameManager.prototype.pointValues = {
 };
 
 GameManager.prototype.decay = {
+	"Tritium": {
+		"multipler": "2.75",
+		"to": "3Helium",
+	},
 	"7Beryllium": {
-		"multipler": "3",
-		"to": "Helium-4",
+		"multipler": "2.75",
+		"to": "4Helium",
 		"points": -3
 	},
 	"8Beryllium": {
-		"multipler": "1",
-		"to": "Helium-4",
+		"multipler": "0.75",
+		"to": "4Helium",
 		"points": -4
 	},
-	"20Neon": {
-		"multipler": "2.5",
-		"to": "16Oxygen",
-		"points": -10
+	"14Carbon": {
+		"multipler": "3",
+		"to": "14Nitrogen"
+	},
+	"13Nitrogen": {
+		"multipler": "2.25",
+		"to": "13Carbon"
+	},
+	"15Oxygen": {
+		"multipler": "2.25",
+		"to": "15Nitrogen"
 	},
 	"52Iron": {
 		"multipler": "2",
@@ -423,8 +490,18 @@ GameManager.prototype.decay = {
 		"points": -26
 	},
 	"56Nickel": {
-		"multipler": "1.5",
+		"multipler": "2",
 		"to": "56Iron",
+		"points": 56
+	},
+	"63Nickel": {
+		"multipler": "3",
+		"to": "56Iron",
+		"points": 56
+	},
+	"64Copper": {
+		"multipler": "2.5",
+		"to": "64Nickel",
 		"points": 56
 	}
 };
