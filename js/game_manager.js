@@ -388,9 +388,9 @@ GameManager.prototype.fusionRules = {
 
 GameManager.prototype.labels = {
 	"Neutron": "<sup>1</sup>n",
-	"Hydrogen": "<sup>1</sup>H",
-	"Deuterium": "<sup>2</sup>H",
-	"Tritium": "<sup>3</sup>H",
+	"Hydrogen": "<sup>1</sup>p",
+	"Deuterium": "<sup>2</sup>D",
+	"Tritium": "<sup>3</sup>T",
 	"3Helium": "<sup>3</sup>He",
 	"4Helium": "<sup>4</sup>He",
 	"7Lithium": "<sup>7</sup>Li",
