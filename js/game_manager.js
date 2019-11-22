@@ -339,6 +339,10 @@ GameManager.prototype.fusionRules = {
 							"14Nitrogen":"15Oxygen",
 							"15Nitrogen":"16Oxygen",
 							"23Sodium":"24Magnesium",
+		    				"58Iron":"59Cobalt",
+				"59Cobalt":"60Nickel",
+		    				"64Nickel":"65Copper",
+		    			"65Copper":"66Zinc",
 						 },
 	"Deuterium":{"Deuterium":"Tritium"},
 	"Tritium":{"20Neon":"23Sodium"},
@@ -372,16 +376,12 @@ GameManager.prototype.fusionRules = {
 				"19Fluorine":"20Neon",
 				"56Iron":"57Iron",
 				"57Iron":"58Iron",
-				"58Iron":"59Cobalt",
-				"59Cobalt":"60Nickel",
 				"60Nickel":"61Nickel",
 				"61Nickel":"62Nickel",
 				"62Nickel":"63Nickel",
 				"63Nickel":"64Nickel",
-				"64Nickel":"65Copper",
 				"63Copper":"64Copper",
 				"64Copper":"65Copper",
-				"65Copper":"66Zinc",
 	},
 };
 
@@ -436,14 +436,27 @@ GameManager.prototype.labels = {
 };
 
 GameManager.prototype.pointValues = {
+	"Hydrogen":1,
 	"Deuterium":1,
-	"3Helium":1.5,
+	"Tritium":1,
+	"3Helium":2,
 	"4Helium":2,
-	"7Beryllium":3,
+	"7Lithium":3,
+	"7Beryllium":4,
 	"8Beryllium":4,
 	"12Carbon":6,
+	"13Carbon":6,
+	"14Carbon":6,
+	"13Nitrogen":7,
+	"14Nitrogen":7,
+	"15Nitrogen":7,
+	"15Oxygen":8,
 	"16Oxygen":8,
+	"17Oxygen":8,
+	"18Oxygen":8,
+	"19Fluorine":9,
 	"20Neon":10,
+	"23Sodium":11,
 	"24Magnesium":12,
 	"27Aluminum":13,
 	"28Silicon":14,
@@ -453,55 +466,70 @@ GameManager.prototype.pointValues = {
 	"44Titanium":22,
 	"48Chromium":24,
 	"52Iron":26,
+	"56Iron":26,
+	"57Iron":26,
+	"58Iron":26,
 	"56Nickel":28,
-	"56Iron":56
+	"60Nickel":28,
+	"61Nickel":28,
+	"62Nickel":28,
+	"63Nickel":28,
+	"64Nickel":28,
+	"63Copper":29,
+	"64Copper":29,
+	"65Copper":29,
+	"66Zinc":30
 };
 
 GameManager.prototype.decay = {
 	"Tritium": {
 		"multipler": "2.75",
 		"to": "3Helium",
+		"points": 1
 	},
 	"7Beryllium": {
 		"multipler": "2.75",
 		"to": "4Helium",
-		"points": -3
+		"points": -2
 	},
 	"8Beryllium": {
 		"multipler": "0.75",
 		"to": "4Helium",
-		"points": -4
+		"points": -2
 	},
 	"14Carbon": {
 		"multipler": "3",
-		"to": "14Nitrogen"
+		"to": "14Nitrogen",
+		"points": 1
 	},
 	"13Nitrogen": {
 		"multipler": "2.25",
-		"to": "13Carbon"
+		"to": "13Carbon",
+		"points": -1
 	},
 	"15Oxygen": {
 		"multipler": "2.25",
-		"to": "15Nitrogen"
+		"to": "15Nitrogen",
+		"points": -1
 	},
 	"52Iron": {
 		"multipler": "2",
 		"to": "48Chromium",
-		"points": -26
+		"points": -2
 	},
 	"56Nickel": {
 		"multipler": "2",
 		"to": "56Iron",
-		"points": 56
+		"points": -2
 	},
 	"63Nickel": {
 		"multipler": "3",
 		"to": "63Copper",
-		"points": 56
+		"points": 1
 	},
 	"64Copper": {
 		"multipler": "2.5",
 		"to": "64Nickel",
-		"points": 56
+		"points": -1
 	}
 };
