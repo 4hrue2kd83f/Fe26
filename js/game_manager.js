@@ -28,6 +28,7 @@ GameManager.prototype.restart = function () {
 
 // Keep playing after winning (allows going over 2048)
 GameManager.prototype.keepPlaying = function () {
+	var x = true
 	this.keepPlaying = true;
 	this.actuator.continueGame(); // Clear the game won/lost message
 };
@@ -330,20 +331,6 @@ GameManager.prototype.fusion = function (first, second) {
 // a:{b:c}
 // a + b = c
 GameManager.prototype.fusionRules = {
-	"Hydrogen":{"Neutron":"Deuterium",
-							"Hydrogen":"Deuterium",
-							"Deuterium":"3Helium",
-							"7Lithium":"8Beryllium",
-							"12Carbon":"13Nitrogen",
-							"13Carbon":"14Nitrogen",
-							"14Nitrogen":"15Oxygen",
-							"15Nitrogen":"16Oxygen",
-							"23Sodium":"24Magnesium",
-		    				"58Iron":"59Cobalt",
-				"59Cobalt":"60Nickel",
-		    				"64Nickel":"65Copper",
-		    			"65Copper":"66Zinc",
-						 },
 	"Deuterium":{"Deuterium":"Tritium"},
 	"Tritium":{"20Neon":"23Sodium"},
 	"3Helium":{"3Helium":"4Helium",
@@ -367,13 +354,36 @@ GameManager.prototype.fusionRules = {
 						 },
 	"16Oxygen":{"16Oxygen":"28Silicon", // + 4Helium
 						 },
+	"56Iron":{"56Iron":"56Iron"},
+	"Hydrogen":{"Neutron":"Deuterium",
+							"Hydrogen":"Deuterium",
+							"Deuterium":"3Helium",
+							"7Lithium":"8Beryllium",
+							"12Carbon":"13Nitrogen",
+							"13Carbon":"14Nitrogen",
+							"14Nitrogen":"15Oxygen",
+							"15Nitrogen":"16Oxygen",
+						"18Oxygen":"19Fluorine",
+						"19Fluorine":"20Neon",
+							"23Sodium":"24Magnesium",
+							"27Aluminum":"28Silicon",
+		    				"58Iron":"59Cobalt",
+				"59Cobalt":"60Nickel",
+							"62Nickel":"63Copper",
+		    				"64Nickel":"65Copper",
+		    			"65Copper":"66Zinc",
+							"70Zinc":"71Gallium",
+							"69Gallium":"70Germanium",
+							"70Gallium":"71Germanium",
+							"71Gallium":"72Germanium",
+							"74Germanium":"75Arsenic",
+							"75Arsenic":"76Selenium"
+						 },
 	"Neutron":{"Hydrogen":"Deuterium",
 		"Deuterium":"Tritium",
 				"13Carbon":"14Carbon",
 				"16Oxygen":"17Oxygen",
 				"17Oxygen":"18Oxygen",
-				"18Oxygen":"19Fluorine",
-				"19Fluorine":"20Neon",
 				"56Iron":"57Iron",
 				"57Iron":"58Iron",
 				"60Nickel":"61Nickel",
@@ -382,6 +392,16 @@ GameManager.prototype.fusionRules = {
 				"63Nickel":"64Nickel",
 				"63Copper":"64Copper",
 				"64Copper":"65Copper",
+				"66Zinc":"67Zinc",
+				"67Zinc":"68Zinc",
+				"68Zinc":"69Zinc",
+				"69Zinc":"70Zinc",
+				"69Gallium":"70Gallium",
+				"70Gallium":"71Gallium",
+				"70Germanium":"71Germanium",
+				"71Germanium":"72Germanium",
+				"72Germanium":"73Germanium",
+				"73Germanium":"74Germanium",
 	},
 };
 
@@ -434,6 +454,20 @@ GameManager.prototype.labels = {
 	"64Copper": "<sup>64</sup>Cu",
 	"65Copper": "<sup>65</sup>Cu",
 	"66Zinc": "<sup>66</sup>Zn",
+	"67Zinc": "<sup>67</sup>Zn",
+	"68Zinc": "<sup>68</sup>Zn",
+	"69Zinc": "<sup>69</sup>Zn",
+	"70Zinc": "<sup>70</sup>Zn",
+	"69Gallium": "<sup>69</sup>Ga",
+	"70Gallium": "<sup>70</sup>Ga",
+	"71Gallium": "<sup>71</sup>Ga",
+	"70Germanium": "<sup>70</sup>Ge",
+	"71Germanium": "<sup>71</sup>Ge",
+	"72Germanium": "<sup>72</sup>Ge",
+	"73Germanium": "<sup>73</sup>Ge",
+	"74Germanium": "<sup>74</sup>Ge",
+	"75Arsenic": "<sup>75</sup>As",
+	"76Selenium": "<sup>76</sup>Se",
 };
 
 GameManager.prototype.pointValues = {
@@ -532,5 +566,10 @@ GameManager.prototype.decay = {
 		"multipler": "2.5",
 		"to": "64Nickel",
 		"points": -1
+	},
+	"69Zinc": {
+		"multipler": "2",
+		"to": "69Gallium",
+		"points": 1
 	}
 };
