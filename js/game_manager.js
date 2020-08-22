@@ -1,14 +1,14 @@
 function GameManager(size, InputManager, Actuator, StorageManager) {
-  this.size           = size; // Size of the grid
-  this.inputManager   = new InputManager;
+  this.size = size; // Size of the grid
+  this.inputManager = new InputManager;
   this.storageManager = new StorageManager;
-  this.actuator       = new Actuator;
+  this.actuator = new Actuator;
 
   this.version = 0.8;
 
   this.storageManager.clearIfOutdated(this.version);
 
-  this.startTiles     = 2;
+  this.startTiles = 2;
   this.winningValue = "56Iron";
 
   this.inputManager.on("move", this.move.bind(this));
@@ -16,7 +16,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
   this.setup();
-	return this;
+  return this;
 }
 
 // Restart the game
@@ -47,17 +47,17 @@ GameManager.prototype.setup = function () {
 
   // Reload the game from a previous game if present
   if (previousState) {
-    this.grid        = new Grid(previousState.grid.size,
-                                previousState.grid.cells); // Reload grid
-    this.score       = previousState.score;
-    this.over        = previousState.over;
-    this.won         = previousState.won;
+    this.grid = new Grid(previousState.grid.size,
+      previousState.grid.cells); // Reload grid
+    this.score = previousState.score;
+    this.over = previousState.over;
+    this.won = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
   } else {
-    this.grid        = new Grid(this.size);
-    this.score       = 0;
-    this.over        = false;
-    this.won         = false;
+    this.grid = new Grid(this.size);
+    this.score = 0;
+    this.over = false;
+    this.won = false;
     this.keepPlaying = false;
 
     // Add the initial tiles
@@ -78,8 +78,16 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
   if (this.grid.cellsAvailable()) {
-    var value = Math.random() < 0.9 ? "Hydrogen" : "Deuteron";
-    var tile = new Tile(this.grid.randomAvailableCell(), value, this.labels[value]);
+    var seed = Math.random();
+    if (seed < 0.6) {
+      var tile = new Tile(this.grid.randomAvailableCell(), 1, 0); // 60% chance of Hydrogen-1
+    } else if (seed < 0.9) {
+      var tile = new Tile(this.grid.randomAvailableCell(), 0, 1); // 30% chance of neutron
+    } else if (seed < 0.99) {
+      var tile = new Tile(this.grid.randomAvailableCell(), 2, 2); // 9% chance of Helium-4
+    } else {
+      var tile = new Tile(this.grid.randomAvailableCell(), 3, 4); // 1% chance of Lithium-7
+    }
 
     this.grid.insertTile(tile);
   }
@@ -99,10 +107,10 @@ GameManager.prototype.actuate = function () {
   }
 
   this.actuator.actuate(this.grid, {
-    score:      this.score,
-    over:       this.over,
-    won:        this.won,
-    bestScore:  this.storageManager.getBestScore(),
+    score: this.score,
+    over: this.over,
+    won: this.won,
+    bestScore: this.storageManager.getBestScore(),
     terminated: this.isGameTerminated()
   });
 
@@ -111,10 +119,10 @@ GameManager.prototype.actuate = function () {
 // Represent the current game as an object
 GameManager.prototype.serialize = function () {
   return {
-    grid:        this.grid.serialize(),
-    score:       this.score,
-    over:        this.over,
-    won:         this.won,
+    grid: this.grid.serialize(),
+    score: this.score,
+    over: this.over,
+    won: this.won,
     keepPlaying: this.keepPlaying
   };
 };
@@ -145,9 +153,9 @@ GameManager.prototype.move = function (direction) {
 
   var cell, tile;
 
-  var vector     = this.getVector(direction);
+  var vector = this.getVector(direction);
   var traversals = this.buildTraversals(vector);
-  var moved      = false;
+  var moved = false;
 
   // Save the current tile positions and remove merger information
   this.prepareTiles();
@@ -158,24 +166,23 @@ GameManager.prototype.move = function (direction) {
       cell = { x: x, y: y };
       tile = self.grid.cellContent(cell);
 
-      if (tile) {
+      if (tile != undefined) {
         var positions = self.findFarthestPosition(cell, vector);
-        var next      = self.grid.cellContent(positions.next);
+        var next = self.grid.cellContent(positions.next);
 
         // Only one merger per row traversal?
         var shouldMove = true;
         if (next && !next.mergedFrom) {
           //if(next.value === tile.value) {
-          if( self.canFuse(next.value,tile.value) ) {
+          if (self.canFuse(next, tile)) {
             shouldMove = false;
-            var fusionValue = self.fusion(next.value,tile.value);
-            var merged = new Tile(positions.next, fusionValue, self.labels[fusionValue]);
+            // var fusionValue = self.fusion(next.value, tile.value);
+            var merged = new Tile(positions.next, (next.z + tile.z), (next.n + tile.n));
             merged.mergedFrom = [tile, next];
 
-            var decay = self.decay[fusionValue] || false;
-
-            if(decay !== false) {
-              merged.movesLeft = Math.floor(Math.random() * (Math.ceil(8*decay['multipler']) - Math.ceil(4*decay['multipler']) + 1)) + Math.ceil(4*decay['multipler']);
+            if (merged.decayMode !== "s") {
+              decayMultiplier = (Math.random() * 2.5);
+              merged.movesLeft = Math.floor(Math.random() * (Math.ceil(8 * decayMultiplier) - Math.ceil(4 * decayMultiplier) + 1)) + Math.ceil(4 * decayMultiplier);
             }
 
             self.grid.insertTile(merged);
@@ -185,7 +192,7 @@ GameManager.prototype.move = function (direction) {
             tile.updatePosition(positions.next);
 
             // Update the score
-            self.score += self.pointValues[merged.value];
+            self.score += merged.w;
 
             // TODO win state ( if not decaying )
             if (merged.value === self.winningValue) self.won = true;
@@ -205,17 +212,59 @@ GameManager.prototype.move = function (direction) {
   if (moved) {
     this.addRandomTile();
 
-    this.grid.eachCell(function(x, y, tile) {
-      if(tile !== null && self.decay[tile.value] && tile.decay()) {
-        var decayValue = self.decay[tile.value]['to'];
+    this.grid.eachCell(function (x, y, tile) {
+      if (tile !== null && tile.decay()) {
+        var decayProtons;
+        var decayNeutrons;
+
+        switch (tile.decayMode) {
+          case "s":
+            decayProtons = 0;
+            decayNeutrons = 0;
+            break;
+          case "b-":
+            decayProtons = 1;
+            decayNeutrons = -1;
+            break;
+          case "b+":
+            decayProtons = -1;
+            decayNeutrons = 1;
+            break;
+          case "a":
+            decayProtons = -2;
+            decayNeutrons = -2;
+            break;
+          case "n":
+            decayProtons = 0;
+            decayNeutrons = -1;
+            break;
+          case "2n":
+            decayProtons = 0;
+            decayNeutrons = -2;
+            break;
+          case "p":
+            decayProtons = -1;
+            decayNeutrons = 0;
+            break;
+          case "2p":
+            decayProtons = -2;
+            decayNeutrons = 0;
+            break;
+          case "e-c":
+            decayProtons = -1;
+            decayNeutrons = 1;
+            break;
+          default:
+            decayProtons = 0;
+            decayNeutrons = 0;
+        }
+
         var decayed = new Tile({
           x: tile.x,
           y: tile.y
-        }, decayValue, self.labels[decayValue]);
+        }, tile.z + decayProtons, tile.n + decayNeutrons);
         self.grid.removeTile(tile);
         self.grid.insertTile(decayed);
-
-        self.score += self.decay[tile.value].points;
 
         if (decayed.value === self.winningValue) self.won = true;
       }
@@ -233,9 +282,9 @@ GameManager.prototype.move = function (direction) {
 GameManager.prototype.getVector = function (direction) {
   // Vectors representing tile movement
   var map = {
-    0: { x: 0,  y: -1 }, // Up
-    1: { x: 1,  y: 0 },  // Right
-    2: { x: 0,  y: 1 },  // Down
+    0: { x: 0, y: -1 }, // Up
+    1: { x: 1, y: 0 },  // Right
+    2: { x: 0, y: 1 },  // Down
     3: { x: -1, y: 0 }   // Left
   };
 
@@ -264,9 +313,9 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
   // Progress towards the vector direction until an obstacle is found
   do {
     previous = cell;
-    cell     = { x: previous.x + vector.x, y: previous.y + vector.y };
+    cell = { x: previous.x + vector.x, y: previous.y + vector.y };
   } while (this.grid.withinBounds(cell) &&
-           this.grid.cellAvailable(cell));
+    this.grid.cellAvailable(cell));
 
   return {
     farthest: previous,
@@ -291,11 +340,11 @@ GameManager.prototype.tileMatchesAvailable = function () {
       if (tile) {
         for (var direction = 0; direction < 4; direction++) {
           var vector = self.getVector(direction);
-          var cell   = { x: x + vector.x, y: y + vector.y };
+          var cell = { x: x + vector.x, y: y + vector.y };
 
-          var other  = self.grid.cellContent(cell);
+          var other = self.grid.cellContent(cell);
 
-          if (other && self.canFuse(other.value, tile.value)) {
+          if (other && self.canFuse(other, tile)) {
             return true; // These two tiles can be merged
           }
         }
@@ -311,8 +360,29 @@ GameManager.prototype.positionsEqual = function (first, second) {
 };
 
 GameManager.prototype.canFuse = function (first, second) {
-  return (this.fusionRules[first]  && this.fusionRules[first][second]) ||
-         (this.fusionRules[second] && this.fusionRules[second][first]);
+  if (first.movesLeft >= 0) { // Radioactive isotopes can't be merged
+    return false;
+  };
+  if (second.movesLeft >= 0) {
+    return false;
+  };
+
+  var newz = first.z + second.z;
+  var neww = first.w + second.w;
+
+  if (newz > maxFuseableElement) {
+    return false;
+  };
+
+  if (isotopeData[newz].w > neww) {
+    return false;
+  }; // Can't merge if isotope doesn't exist
+
+  if ((isotopeData[newz].isotopes[neww - isotopeData[newz].w]) == undefined) {
+    return false;
+  };
+
+  return true; // True if all above checks failed
 };
 
 GameManager.prototype.fusion = function (first, second) {
@@ -327,30 +397,35 @@ GameManager.prototype.fusion = function (first, second) {
 
 // a:{b:c}
 // a + b = c
-GameManager.prototype.fusionRules = {
-  "Hydrogen":{"Hydrogen":"Deuteron",
-							"Deuteron":"3Helium"
-						 },
-  "3Helium":{"3Helium":"4Helium",
-							"4Helium":"7Beryllium"
-						},
-  "4Helium":{"4Helium":"8Beryllium", // unstable decays into 2 4heliums
-						 "8Beryllium":"12Carbon",
-						 "12Carbon":"16Oxygen",
-						 "16Oxygen":"20Neon",
-						 "20Neon":"24Magnesium", // this is a killer!
-						 "28Silicon":"32Sulfur",
-						 "32Sulfur":"36Argon",
-						 "36Argon":"40Calcium",
-						 "40Calcium":"44Titanium",
-						 "44Titanium":"48Chromium",
-						 "48Chromium":"52Iron",
-						 "52Iron":"56Nickel"
-						},
-  "16Oxygen":{"16Oxygen":"28Silicon", // + 4Helium
-             },
-  "12Carbon":{"12Carbon":"20Neon", // + 4Helium (randomness)
-						 }
+/* GameManager.prototype.fusionRules = {
+  "Hydrogen": {
+    "Hydrogen": "Deuteron",
+    "Deuteron": "3Helium"
+  },
+  "3Helium": {
+    "3Helium": "4Helium",
+    "4Helium": "7Beryllium"
+  },
+  "4Helium": {
+    "4Helium": "8Beryllium", // unstable decays into 2 4heliums
+    "8Beryllium": "12Carbon",
+    "12Carbon": "16Oxygen",
+    "16Oxygen": "20Neon",
+    "20Neon": "24Magnesium", // this is a killer!
+    "28Silicon": "32Sulfur",
+    "32Sulfur": "36Argon",
+    "36Argon": "40Calcium",
+    "40Calcium": "44Titanium",
+    "44Titanium": "48Chromium",
+    "48Chromium": "52Iron",
+    "52Iron": "56Nickel"
+  },
+  "16Oxygen": {
+    "16Oxygen": "28Silicon", // + 4Helium
+  },
+  "12Carbon": {
+    "12Carbon": "20Neon", // + 4Helium (randomness)
+  }
 };
 
 GameManager.prototype.labels = {
@@ -376,50 +451,50 @@ GameManager.prototype.labels = {
 };
 
 GameManager.prototype.pointValues = {
-  "Deuteron":1,
-  "3Helium":1.5,
-  "4Helium":2,
-  "7Beryllium":3,
-  "8Beryllium":4,
-  "12Carbon":6,
-  "16Oxygen":8,
-  "20Neon":10,
-  "24Magnesium":12,
-  "28Silicon":14,
-  "32Sulfur":16,
-  "36Argon":18,
-  "40Calcium":20,
-  "44Titanium":22,
-  "48Chromium":24,
-  "52Iron":26,
-  "56Nickel":28,
-  "56Iron":56
+  "Deuteron": 1,
+  "3Helium": 1.5,
+  "4Helium": 2,
+  "7Beryllium": 3,
+  "8Beryllium": 4,
+  "12Carbon": 6,
+  "16Oxygen": 8,
+  "20Neon": 10,
+  "24Magnesium": 12,
+  "28Silicon": 14,
+  "32Sulfur": 16,
+  "36Argon": 18,
+  "40Calcium": 20,
+  "44Titanium": 22,
+  "48Chromium": 24,
+  "52Iron": 26,
+  "56Nickel": 28,
+  "56Iron": 56
 };
 
 GameManager.prototype.decay = {
   "7Beryllium": {
     "multipler": "3",
     "to": "4Helium",
-		"points": -3
+    "points": -3
   },
   "8Beryllium": {
     "multipler": "1",
     "to": "4Helium",
-		"points": -4
+    "points": -4
   },
   "20Neon": {
     "multipler": "2.5",
     "to": "16Oxygen",
-		"points": -10
+    "points": -10
   },
   "52Iron": {
     "multipler": "2",
     "to": "48Chromium",
-		"points": -26
+    "points": -26
   },
   "56Nickel": {
     "multipler": "1.5",
     "to": "56Iron",
-		"points": 56
+    "points": 56
   }
-};
+}; */

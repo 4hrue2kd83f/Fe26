@@ -1,7 +1,7 @@
 function HTMLActuator() {
-  this.tileContainer    = document.querySelector(".tile-container");
-  this.scoreContainer   = document.querySelector(".score-container");
-  this.bestContainer    = document.querySelector(".best-container");
+  this.tileContainer = document.querySelector(".tile-container");
+  this.scoreContainer = document.querySelector(".score-container");
+  this.bestContainer = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
 
   this.score = 0;
@@ -49,20 +49,27 @@ HTMLActuator.prototype.clearContainer = function (container) {
 HTMLActuator.prototype.addTile = function (tile) {
   var self = this;
 
-  var wrapper   = document.createElement("div");
-  var inner     = document.createElement("div");
-  var counter   = document.createElement("div");
-  var position  = tile.previousPosition || { x: tile.x, y: tile.y };
+  var wrapper = document.createElement("div");
+  var inner = document.createElement("div");
+  var counter = document.createElement("div");
+  var position = tile.previousPosition || { x: tile.x, y: tile.y };
   var positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.value, positionClass];
+  var classes = ["tile", "tile-" + tile.z + "-" + tile.n, positionClass];
 
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
   inner.innerHTML = tile.label;
   inner.dataset.value = tile.value;
+
+  inner.style.backgroundColor = tile.color;
+  inner.style.color = tile.textColor;
+
+  if (tile.decayMode !== "s") {
+    inner.style.boxShadow = "0px 0px 5px 5px " + tile.color;
+  }
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -83,10 +90,36 @@ HTMLActuator.prototype.addTile = function (tile) {
     this.applyClasses(wrapper, classes);
   }
 
-  if(tile.movesLeft >= 0) {
+  if (tile.movesLeft >= 0) {
     counter.textContent = tile.movesLeft;
     counter.classList.add('tile-counter');
     wrapper.appendChild(counter);
+
+    var color;
+    switch (tile.decayMode) {
+      case "b-":
+        color = "#ADD8E6";
+        break;
+      case "b+":
+        color = "#FFC0CB";
+        break;
+      case "n":
+        color = "#5F9EA0";
+        break;
+      case "p":
+        color = "#F08080";
+        break;
+      case "a":
+        color = "#FFFF00";
+        break;
+      case "e-c":
+        color = "#DDA0A0";
+        break;
+      default:
+        color = "#00ADA0";
+    }
+
+    counter.style.backgroundColor = color;
   }
 
   // Add the inner part of the tile to the wrapper
@@ -131,7 +164,7 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 };
 
 HTMLActuator.prototype.message = function (won) {
-  var type    = won ? "game-won" : "game-over";
+  var type = won ? "game-won" : "game-over";
   var message = won ? "You win!" : "Your star ran out of fuel!";
 
   this.messageContainer.classList.add(type);
